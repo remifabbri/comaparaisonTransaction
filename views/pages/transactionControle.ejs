@@ -1,0 +1,115 @@
+<html lang="fr">
+    <head>
+        <link href="/css/transactionControle.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div>
+            <h1><%= titre %></h2>
+
+            <h2>Liste des Opérations</h2>
+            <ul class='blockListe'>
+                <% Object.keys(data).forEach((d) => { %>
+
+                    <% if (data[d].refSyncSMMatch.length === 0 && data[d].refSyncSMNoPerfectMatch.length === 0) { %>
+                        <li>
+                            <i class="iError"><%= data[d].message %></i>
+                            <div class="item error">
+                                <strong>id : <%= d %></strong>
+                                <span>Date : <%= new Date(data[d].date*1000).toLocaleString('fr-FR') %></span>
+                                <span>Montant : <%= data[d].balance %>€</span>
+                            </div>
+                            <button class="add btnValidate">+ Ajouter une opération manquante</button>
+                        </li>
+                    <% } %>
+                    <% if (data[d].refSyncSMMatch.length === 0 && data[d].refSyncSMNoPerfectMatch.length > 0){ %>
+                        <li>
+                            <i class="iError"><%= data[d].message %></i>
+                            <div class="item error">
+                                <strong>id : <%= d %></strong>
+                                <span>Date : <%= new Date(data[d].date*1000).toLocaleString('fr-FR') %></span>
+                                <span>Montant : <%= data[d].balance %>€</span>
+                            </div>
+                            <ul>
+                                <% Object.keys(data[d].refSyncSMNoPerfectMatch).forEach((ref) => { %>
+                                    <li class='subItem'>
+                                        <div class="item choix subError">
+                                            <strong>id : <%= data[d].refSyncSMNoPerfectMatch[ref].id %></strong>
+                                            <span>Nom : <%= data[d].refSyncSMNoPerfectMatch[ref].wording %></span>
+                                            <span>Date : <%= new Date(data[d].refSyncSMNoPerfectMatch[ref].date*1000).toLocaleString('fr-FR') %></span>
+                                            <span>Montant : <%= data[d].refSyncSMNoPerfectMatch[ref].amount %>€</span>
+                                        </div>
+                                        <button class="btnValidate">Valider</button>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% } %>
+                    <% if (data[d].refSyncSMMatch.length === 1) { %>
+                        <li>
+                            <i class="iValidated"><%= data[d].message %></i>
+                            <div class="item validated">
+                                <strong>id : <%= d %></strong>
+                                <span></span>
+                                <span>Date : <%= new Date(data[d].date*1000).toLocaleString('fr-FR') %></span>
+                                <span>Montant : <%= data[d].balance %>€</span>
+                            </div>
+                            <ul>
+                                <% Object.keys(data[d].refSyncSMMatch).forEach((ref) => { %>
+                                    <li class='subItem'>
+                                        <div class="item subValidated">
+                                            <strong>id : <%= data[d].refSyncSMMatch[ref].id %></strong>
+                                            <span>Nom : <%= data[d].refSyncSMMatch[ref].wording %></span>
+                                            <span>Date : <%=  new Date(data[d].refSyncSMMatch[ref].date*1000).toLocaleString('fr-FR') %></span>
+                                            <span>Montant : <%= data[d].refSyncSMMatch[ref].amount %>€</span>
+                                        </div>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% } %>
+                    <% if (data[d].refSyncSMMatch.length > 1) { %>
+                        <li>
+                            <i class="iError"><%= data[d].message %></i>
+                            <div class="item error">
+                                <strong>id : <%= d %></strong>
+                                <span>Date : <%= new Date(data[d].date*1000).toLocaleString('fr-FR') %></span>
+                                <span>Montant : <%= data[d].balance %>€</span>
+                            </div>
+                            <ul>
+                                <% Object.keys(data[d].refSyncSMMatch).forEach((ref) => { %>
+                                    <li class='subItem'>
+                                        <div class="item choix subError">
+                                            <strong>id : <%= data[d].refSyncSMMatch[ref].id %></strong>
+                                            <span>Nom : <%= data[d].refSyncSMMatch[ref].wording %></span>
+                                            <span>Date : <%= new Date(data[d].refSyncSMMatch[ref].date*1000).toLocaleString('fr-FR') %></span>
+                                            <span>Montant : <%= data[d].refSyncSMMatch[ref].amount %>€</span>
+                                        </div>
+                                        <button class="btnDelete">Supprimer</button>
+                                    </li>
+                                <% }); %>
+                            </ul>
+                        </li>
+                    <% } %>
+                <% }); %>
+            </ul>
+
+
+            <h2>Opérations sans correspondance avec les opérations bancaires </h2>
+            <ul class='blockListe'>
+                <% Object.keys(dataNoMatch).forEach((d) => { %>
+                        <li>
+                            <i class="iError"><%= dataNoMatch[d].message %></i>
+                            <div class="item error">
+                                <strong>id : <%= d %></strong>
+                                <span>Nom : <%= dataNoMatch[d].wording %></span>
+                                <span>Date : <%= new Date(dataNoMatch[d].date*1000).toLocaleString('fr-FR') %></span>
+                                <span>Montant : <%= dataNoMatch[d].amount %> €</span>
+                            </div>
+                        </li>
+                        
+                <% }); %>
+            </ul>
+        </div>
+    </body>
+
+</html>
